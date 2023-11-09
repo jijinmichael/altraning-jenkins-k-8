@@ -1,9 +1,10 @@
 pipeline {
 
   environment {
-    dockerimagename = "jijinmichael/nodejs-webapp:latest"
-    dockerImage = ""
-  }
+        registry = "https://hub.docker.com/"
+        imageName = "jijinmichael/nodejs-webapp"
+        imageTag = "latest"
+        registryCredential = 'docker'
 
   agent any
 
@@ -15,26 +16,15 @@ pipeline {
       }
     }
 
-    stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build dockerimagename
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Build the Docker image
+                    docker.build("${registry}/${imageName}:${imageTag}")
+                }
+            }
         }
-      }
-    }
-
-    stage('Pushing Image') {
-      environment {
-               registryCredential = 'docker'
-           }
-      steps{
-        script {
-          docker.withRegistry( 'https://hub.docker.com/', registryCredential ) {
-            dockerImage.push("latest")
-          }
-        }
-      }
-    }
 
     stage('Deploying NodeJs container to Kubernetes') {
       steps {
