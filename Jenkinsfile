@@ -1,7 +1,7 @@
 pipeline {
 
   environment {
-    dockerimagename = "jijinmichael/nodejs-webapp"
+    dockerimagename = "jijinmichael/nodejs-webapp:latest"
     dockerImage = ""
   }
 
